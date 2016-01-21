@@ -1,0 +1,26 @@
+what	328
+who	85
+why	77
+how	50
+where	44
+which	14
+when	9
+do	4
+be	3
+in	3
+the	3
+can	2
+besides	2
+Jimmy	2
+this	2
+at	2
+base	2
+Paws	1
+on	1
+cowboy	1
+will	1
+it	1
+Jim	1
+Mitch	1
+Timmy	1
+
