@@ -1,4 +1,4 @@
-import StanfordUtils.*;
+package StanfordUtils;
 
 import java.util.*;
 
@@ -6,7 +6,7 @@ import java.util.*;
  * this is feature method we use in our model
  * Created by benywon on 1/19 0019.
  */
-public class Features
+public class NLPFeatures
 {
     /**
      * the bag of words matching between two sentence
@@ -16,12 +16,16 @@ public class Features
      * @param sent2 sent2
      * @return matching value
      */
-    public static float getBOGmatching(String sent1,String sent2)
+    public static float get2SETmatching(String sent1, String sent2)
     {
         Set<String> set1=new HashSet<>();
         set1.addAll(Arrays.asList(sent1.split(" ")));
         Set<String> set2=new HashSet<>();
         set2.addAll(Arrays.asList(sent2.split(" ")));
+        return get2SETmatching(set1,set2);
+    }
+    public static float get2SETmatching(Set<String> set1, Set<String> set2)
+    {
         int len=set1.size()>set2.size()?set1.size():set2.size();
         final float[] match = {0};
         set1.forEach(x->{
@@ -45,6 +49,10 @@ public class Features
         Dependency dependency=new Dependency();
         Dependency.DependencyTree dependencyTree1=dependency.annoSentence(sent1);
         Dependency.DependencyTree dependencyTree2=dependency.annoSentence(sent2);
+        return getDepMatching(dependencyTree1,dependencyTree2);
+    }
+     public static float getDepMatching(Dependency.DependencyTree dependencyTree1, Dependency.DependencyTree dependencyTree2)
+    {
         int len=dependencyTree1.size()>dependencyTree2.size()?dependencyTree1.size():dependencyTree2.size();
         final float[] match = {0};
         dependencyTree1.dList.forEach(x-> dependencyTree2.dList.forEach(y->{
@@ -55,7 +63,6 @@ public class Features
         }));
         return match[0]/len;
     }
-
     /**
      * named entity matching
      * 1 for matching
@@ -69,8 +76,12 @@ public class Features
     {
         NER ner1=new NER(sent1);
         NER ner2=new NER(sent2);
-        List<Base.Pair> list1=ner1.getNEPair();
-        List<Base.Pair> list2=ner2.getNEPair();
+        List<CoreNLPBase.Pair> list1=ner1.getNEPair();
+        List<CoreNLPBase.Pair> list2=ner2.getNEPair();
+       return getNEmatching(list1,list2);
+    }
+    public static float getNEmatching(List<CoreNLPBase.Pair> list1,List<CoreNLPBase.Pair> list2)
+    {
         if(list1.size()==0||list2.size()==0)
         {
             return 0;
@@ -91,6 +102,7 @@ public class Features
         }
         return -1;
     }
+
     public static float getPOSmatching(String sent1,String sent2)
     {
         POS pos1=new POS(sent1);
@@ -115,6 +127,10 @@ public class Features
         Parsing parsing2=new Parsing(sent2);
         List<Parsing.Triangle> list1=parsing1.annotateSentence();
         List<Parsing.Triangle> list2=parsing2.annotateSentence();
+        return getParsingMatching(list1,list2);
+    }
+    public static float getParsingMatching(List<Parsing.Triangle> list1,List<Parsing.Triangle> list2)
+    {
         int len=list1.size()>list2.size()?list1.size():list2.size();
         final float[] match = {0};
         list1.forEach(x-> list2.forEach(y->{

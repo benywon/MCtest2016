@@ -13,5 +13,6 @@ public class Main
         process.Process("SW+D");
         process.evaluate("precision");
         process.AddAnswerdQuestion2File("SW+D");
+//        System.out.println(System.getProperty("user.dir"));
     }
 }

@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 /**
  * Created by benywon on 1/20 0020.
  */
-public class Coreference extends Base
+public class Coreference extends CoreNLPBase
 {
     public Coreference(String document)
     {
@@ -25,18 +25,12 @@ public class Coreference extends Base
         Map<Integer, CorefChain> graph = this.document.get(CorefCoreAnnotations.CorefChainAnnotation.class);
         List<CoreMap> sentencesMap = this.document.get(CoreAnnotations.SentencesAnnotation.class);
         List<String> sentences=sentencesMap.stream().map(x->x.toString()).collect(Collectors.toList());
-        graph.forEach((key,value)->{
-            setcoreMap(value,sentences);
-        });
+        graph.forEach((key,value)-> setcoreMap(value,sentences));
         return StringUtils.join(sentences);
     }
     private void setcoreMap(CorefChain corefChain,List<String> sentences)
     {
-        String baseName=corefChain.getRepresentativeMention().mentionSpan;
-        if(!corefChain.getRepresentativeMention().animacy.name().equals("ANIMATE"))
-        {
-            return;
-        }
+        String baseName=corefChain.getMentionsInTextualOrder().get(0).mentionSpan;
         corefChain.getMentionsInTextualOrder().forEach(x->{
             String str=x.mentionSpan;
             if(isValidPronoun(str))
@@ -51,16 +45,13 @@ public class Coreference extends Base
     }
     private String transferName(String s,String str,String baseName)
     {
-        if(s.contains(str))
+        if(s.equals(str))
         {
-            if(s.endsWith("'s"))
-            {
-                s=baseName+" is";
-            }
-            else
-            {
-                s = baseName;
-            }
+            s = baseName;
+        }
+        else  if(s.replace(str,"").equals("'s"))
+        {
+            s=baseName+" is";
         }
         return s;
     }
@@ -74,6 +65,8 @@ public class Coreference extends Base
         if(str.equals("it"))
             return true;
         if(str.equals("I"))
+            return true;
+        if(str.equals("they"))
             return true;
         return false;
     }

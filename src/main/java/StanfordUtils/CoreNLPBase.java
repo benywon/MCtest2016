@@ -8,7 +8,7 @@ import java.util.Properties;
 /**
  * Created by benywon on 1/13 0013.
  */
-public class Base
+public class CoreNLPBase
 {
     /**
      * tokenize  TokensAnnotation (list of tokens), and CharacterOffsetBeginAnnotation, CharacterOffsetEndAnnotation, TextAnnotation (for each token)
@@ -23,7 +23,7 @@ public class Base
     }
     public Annotation document;
     public String text="" ;
-    public Base(String text)
+    public CoreNLPBase(String text)
     {
         if(!this.text.equals(text))
         {
@@ -31,7 +31,7 @@ public class Base
             annotate(text);
         }
     }
-    public Base()
+    public CoreNLPBase()
     {
 
     }

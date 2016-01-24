@@ -3,6 +3,7 @@ package StanfordUtils;
 import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.trees.Tree;
 import edu.stanford.nlp.trees.TreeCoreAnnotations;
+import edu.stanford.nlp.util.CoreMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
  * Constituency Parsing
  * Created by benywon on 1/20 0020.
  */
-public class Parsing extends Base
+public class Parsing extends CoreNLPBase
 {
     public Parsing(String txt)
     {
@@ -68,7 +69,13 @@ public class Parsing extends Base
         getTreeTriagle(tree,list);
         return list;
     }
-
+    public List<Triangle> annotateSentence(CoreMap sentence)
+    {
+        List<Triangle> list=new ArrayList<>();
+        Tree tree=sentence.get(TreeCoreAnnotations.TreeAnnotation.class);
+        getTreeTriagle(tree,list);
+        return list;
+    }
     /**
      * 递归的往这个list里面插入三元组或者二元组
      * @param tree

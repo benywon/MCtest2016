@@ -1,6 +1,7 @@
 package StanfordUtils;
 
 import edu.stanford.nlp.ling.CoreAnnotations;
+import edu.stanford.nlp.util.CoreMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,7 +10,7 @@ import java.util.List;
  * NER 工具
  * Created by benywon on 1/13 0013.
  */
-public class NER extends Base
+public class NER extends CoreNLPBase
 {
     /**
      * the input should be a sentence
@@ -35,6 +36,19 @@ public class NER extends Base
         );
         return list;
     }
+    public List<Pair> getPair(CoreMap sentence)
+    {
+        List<Pair> list=new ArrayList<>();
+        sentence.get(CoreAnnotations.TokensAnnotation.class).forEach(token->
+                {
+                    String word = token.get(CoreAnnotations.TextAnnotation.class);
+                    String ne = token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
+                    list.add(new Pair(word,ne));
+                }
+        );
+        return list;
+    }
+
     public String Transfer2NE()
     {
         StringBuilder stringBuilder=new StringBuilder();
@@ -54,7 +68,7 @@ public class NER extends Base
         );
         return stringBuilder.toString();
     }
-     public String Transfer2NE(String txt)
+    public String Transfer2NE(String txt)
     {
         annotate(txt);
         return Transfer2NE();
@@ -68,7 +82,7 @@ public class NER extends Base
                     String ne=token.get(CoreAnnotations.NamedEntityTagAnnotation.class);
                     if (!ne.equals("O"))
                     {
-                       listpair.add(new Pair(word,ne));
+                        listpair.add(new Pair(word,ne));
                     }
                 }
         );

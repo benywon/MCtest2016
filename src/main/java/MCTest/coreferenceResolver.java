@@ -33,13 +33,14 @@ public class coreferenceResolver
         String tranferLine=StringUtils.join(lists,"\t");
         System.out.println(i++);
         return tranferLine;
+
     }
 
-    public static void main(String[] args)
+    public static void resolveMCtest()
     {
         coreferenceResolver coreferenceResolver=new coreferenceResolver();
-        coreferenceResolver.resolveFile(process.DataRootDir+"MCTest/mc500.train.tsv",process.DataRootDir+"MCTest/CR_mc500.train.tsv");
-        coreferenceResolver.resolveFile(process.DataRootDir+"MCTest/mc500.test.tsv",process.DataRootDir+"MCTest/CR_mc500.test.tsv");
-        coreferenceResolver.resolveFile(process.DataRootDir+"MCTest/mc500.dev.tsv",process.DataRootDir+"MCTest/CR_mc500.dev.tsv");
+        coreferenceResolver.resolveFile(process.DataRootDir+"MCTest/mc500.train.tsv",process.DataRootDir+"MCTest/1CR_mc500.train.tsv");
+        coreferenceResolver.resolveFile(process.DataRootDir+"MCTest/mc500.test.tsv",process.DataRootDir+"MCTest/1CR_mc500.test.tsv");
+        coreferenceResolver.resolveFile(process.DataRootDir+"MCTest/mc500.dev.tsv",process.DataRootDir+"MCTest/1CR_mc500.dev.tsv");
     }
 }

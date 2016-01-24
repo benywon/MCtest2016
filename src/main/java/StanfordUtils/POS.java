@@ -8,7 +8,7 @@ import java.util.List;
 /**
  * Created by benywon on 1/20 0020.
  */
-public class POS extends Base
+public class POS extends CoreNLPBase
 {
 
     public POS(String text)

@@ -4,6 +4,7 @@ import edu.stanford.nlp.ling.CoreAnnotations;
 import edu.stanford.nlp.semgraph.SemanticGraph;
 import edu.stanford.nlp.semgraph.SemanticGraphCoreAnnotations;
 import edu.stanford.nlp.semgraph.SemanticGraphEdge;
+import edu.stanford.nlp.util.CoreMap;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,7 +13,7 @@ import java.util.List;
 /**
  * Created by benywon on 1/19 0019.
  */
-public class Dependency extends Base
+public class Dependency extends CoreNLPBase
 {
     public class DependencyTree
     {
@@ -82,6 +83,20 @@ public class Dependency extends Base
     public DependencyTree annoSentence()
     {
         SemanticGraph dependencies = this.document.get(CoreAnnotations.SentencesAnnotation.class).get(0).get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
+        return getDependencyTreeFromSemanticGraph(dependencies);
+    }
+    /**
+     * a sentence that has been annoted
+     * @param sentence sen
+     * @return triple
+     */
+    public DependencyTree annoSentence(CoreMap sentence)
+    {
+        SemanticGraph dependencies=sentence.get(SemanticGraphCoreAnnotations.BasicDependenciesAnnotation.class);
+        return getDependencyTreeFromSemanticGraph(dependencies);
+    }
+    private DependencyTree getDependencyTreeFromSemanticGraph(SemanticGraph dependencies)
+    {
         DependencyTree dependencyTree=new DependencyTree();
         dependencyTree.root=dependencies.getFirstRoot().word();
         dealDependency(dependencies,dependencyTree);
