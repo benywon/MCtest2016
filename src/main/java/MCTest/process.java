@@ -17,11 +17,23 @@ public class process
     public static final String DataRootDir=Myconfig.Getconfiginfo("MCtestDir");
 
     private static final String MCtestFilePathTemplate=DataRootDir+"MCTest/mc_MCID_._PURPOSE_._IsAnswer_";
+    private static final String CR_MCtestFilePathTemplate=DataRootDir+"MCTest/1CR_mc_MCID_._PURPOSE_._IsAnswer_";
+
+    private boolean coreference_resolve=true;
 
     public process(int id,String purpose)
     {
         String filepath=getFilePath(id,purpose,false);
         this.MCstructure=new MCStructure(filepath);
+        filepath=getFilePath(id,purpose,true);
+        this.MCstructure.setAnswerFromFile(filepath);
+    }
+     public process(int id,String purpose,boolean CR)
+    {
+        this.coreference_resolve=CR;
+        String filepath=getFilePath(id,purpose,false);
+        this.MCstructure=new MCStructure(filepath);
+        this.coreference_resolve=false;
         filepath=getFilePath(id,purpose,true);
         this.MCstructure.setAnswerFromFile(filepath);
     }
@@ -36,7 +48,15 @@ public class process
     }
     private String getFilePath(int id,String purpose,boolean IsAnswer)
     {
-        String filepath=MCtestFilePathTemplate;
+        String filepath;
+        if(this.coreference_resolve)
+        {
+            filepath=CR_MCtestFilePathTemplate;
+        }
+        else
+        {
+            filepath = MCtestFilePathTemplate;
+        }
         if(id==500)
         {
             filepath=filepath.replaceAll("_MCID_","500");

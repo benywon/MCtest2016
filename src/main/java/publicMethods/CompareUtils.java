@@ -1,5 +1,7 @@
 package publicMethods;
 
+import edu.stanford.nlp.util.Execution;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -22,8 +24,8 @@ public class CompareUtils
         {
             dominator+=s1[i]*s2[i];
         }
-        double len1= Math.sqrt(Arrays.asList(s1).stream().reduce(0.0,(a,b)->a*a+b*b));
-        double len2=Math.sqrt(Arrays.asList(s2).stream().reduce(0.0,(a,b)->a*a+b*b));
+        double len1= MathUtils.l2Norm(s1);
+        double len2=MathUtils.l2Norm(s2);
         return dominator/(len1*len2);
     }
 
@@ -54,22 +56,39 @@ public class CompareUtils
     public static double Compare2ListAVE(List<Double[]> list1,List<Double[]> list2)
     {
         List<Double> result=new ArrayList<>();
-        list1.forEach(x->{
-            list2.forEach(y->{
-                result.add(CompareUtils.getCosine(x,y));
-            });
-        });
+        list1.forEach(x-> list2.forEach(y-> result.add(CompareUtils.getCosine(x,y))));
         double ave=result.parallelStream().reduce(0.0,(x,y)->x+y).doubleValue()/result.size();
         return ave;
     }
     public static double getSumsimlarity(List<Double[]> list1,List<Double[]> list2)
     {
-        int len=list1.get(0).length;
+
+        Double[] l1= averageArray(list1);
+        Double[] l2= averageArray(list2);
+        return CompareUtils.getCosine(l1,l2);
+    }
+    public static Double[] getReduced(Double[] values,int len)
+    {
+        for (int i = 0; i < len; i++)
+        {
+            values[i]=values[i]/len;
+        }
+        return values;
+    }
+    public static Double[] averageArray(List<Double[]> list)
+    {
+        int len=list.get(0).length;
         Double[] starts=new Double[len];
         Arrays.setAll(starts,x->0.0);
-        Double[] l1= list1.stream().reduce(starts,(x,y)->sum2array(x,y));
-        Double[] l2= list2.stream().reduce(starts,(x,y)->sum2array(x,y));
-        return CompareUtils.getCosine(l1,l2);
+        for(Double[] one:list)
+        {
+           if(one==null)
+           {
+               continue;
+           }
+            starts=sum2array(starts,one);
+        }
+        return getReduced(starts,len);
     }
     public static Double[] sum2array(Double[] l1,Double[] l2)
     {
@@ -77,7 +96,7 @@ public class CompareUtils
         Double[] sums=new Double[len];
         for (int i = 0; i < len; i++)
         {
-            sums[i]=l1[i]+l2[i];
+            sums[i] = l1[i] + l2[i];
         }
         return sums;
     }

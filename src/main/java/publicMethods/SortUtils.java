@@ -1,6 +1,8 @@
 package publicMethods;
 
 import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 /**
  * Created by benywon on 12/10 0010.
@@ -52,4 +54,20 @@ public class SortUtils {
         sortedMap.putAll(oriMap);
         return sortedMap;
     }
+
+    /**
+     * @param map map
+     * @param reversed true if from small to large
+     * @return sorted map
+     */
+    public static List<String> sortByValues(Map<String,Float> map,boolean reversed)
+    {
+        List<String> sorted_keys=map.entrySet().stream()
+                .sorted((e1, e2) -> reversed?e1.getValue().compareTo(e2.getValue()):e2.getValue().compareTo(e1.getValue())) // custom Comparator
+                .map(e -> e.getKey())
+                .collect(Collectors.toList());
+        return sorted_keys;
+    }
+
+
 }

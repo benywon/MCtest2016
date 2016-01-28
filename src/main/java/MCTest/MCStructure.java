@@ -4,6 +4,7 @@ import publicMethods.Filebases;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -17,7 +18,7 @@ public class MCStructure implements Serializable
 
     public int MC_id;//表征是mctest500 或者是mc160
     public String Purpose;//是test 还是train 还是dev
-    public List<Document> documents=new ArrayList<Document>();
+    public List<Document> documents= new ArrayList<>();
 
     //**************************************//
     //
@@ -47,15 +48,13 @@ public class MCStructure implements Serializable
         Document document = new Document();
         String[] div = onedocstr.split("\t");
         int number=Integer.parseInt(div[0].split("\\.")[2]);
+
         document.setDocID(number);
         document.setDocument(div[2]);
         //from now to the end of line these fields are q&a so we do it separately
         int len=div.length;
-        List<String> questionAanswer=new ArrayList<String>();
-        for(int i=3;i<len;i++)
-        {
-            questionAanswer.add(div[i]);
-        }
+        List<String> questionAanswer= new ArrayList<>();
+        questionAanswer.addAll(Arrays.asList(div).subList(3, len));
         document.setquestionAasnwer(questionAanswer);
         this.documents.add(document);
     }
@@ -90,8 +89,6 @@ public class MCStructure implements Serializable
             this.Purpose=TRAIN;
         }
     }
-
-
     public void setAnswerFromFile(String filename)
     {
         List<String> answers= Filebases.GetListFromFile(filename);
@@ -121,6 +118,6 @@ public class MCStructure implements Serializable
     }
     private int returnint(String in)
     {
-       return in.compareTo("A");
+        return in.compareTo("A");
     }
 }

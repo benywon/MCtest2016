@@ -60,7 +60,7 @@ public class BerkeleyDB
         }
         catch (DatabaseException dbe)
         {
-            System.err.println(dbe.getMessage());
+           dbe.printStackTrace();
         }
     }
     public String get(String key) {
@@ -117,6 +117,7 @@ public class BerkeleyDB
         }
         return false;
     }
+    //TODO unit test has not been done
     public void getEveryItem()
     {
         Cursor cursor = null;

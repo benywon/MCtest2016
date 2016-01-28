@@ -71,7 +71,14 @@ public class WordEmbedding
             String[] items=line.split(" ");
             for(String item:items)
             {
-                vector[index]=Double.parseDouble(item);
+                try
+                {
+                    vector[index] = Double.parseDouble(item);
+                }
+                catch (Exception e)
+                {
+                    return ZeroWord;
+                }
                 index++;
             }
             return vector;
